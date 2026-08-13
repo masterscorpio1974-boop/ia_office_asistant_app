@@ -10,20 +10,21 @@ jobs:
       - name: Preparar icon y www
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick
-          echo "Archivos en la carpeta:"
-          ls -lh ia_office_asistant_app/
-          # Convierte JPG a PNG si existe
-          if [ -f "ia_office_asistant_app/icon.jpg" ]; then
-            convert ia_office_asistant_app/icon.jpg ia_office_asistant_app/icon.png
-            echo "JPG convertido a PNG"
-          fi
-          if [ ! -f "ia_office_asistant_app/icon.png" ]; then
-            echo "ERROR: no hay icon.png ni icon.jpg"
-            exit 1
-          fi
+          pwd
+          ls -lh
+          # Busca el icono donde esté (raiz o carpeta)
+          ICON_SRC=""
+          if [ -f "icon.jpg" ]; then ICON_SRC="icon.jpg"; fi
+          if [ -f "icon.png" ]; then ICON_SRC="icon.png"; fi
+          if [ -f "ia_office_asistant_app/icon.jpg" ]; then ICON_SRC="ia_office_asistant_app/icon.jpg"; fi
+          if [ -f "ia_office_asistant_app/icon.png" ]; then ICON_SRC="ia_office_asistant_app/icon.png"; fi
+          echo "Icono encontrado: $ICON_SRC"
+          if [ -z "$ICON_SRC" ]; then echo "No hay icono!" && exit 1; fi
+          # Convierte a icon.png en raiz
+          convert "$ICON_SRC" icon.png
           mkdir -p www
-          cp ia_office_asistant_app/index.html www/index.html || cp index.html www/index.html
-          cp ia_office_asistant_app/icon.png www/icon.png || true
+          cp index.html www/index.html || cp ia_office_asistant_app/index.html www/index.html || true
+          cp icon.png www/icon.png
           ls -lh www/
 
       - uses: actions/setup-node@v4
@@ -41,18 +42,10 @@ jobs:
           npx cap add android || true
           npx cap copy android
           npx cap sync android
-          # Iconos con margen 280x280 para que tu S no se corte
-          for dir in hdpi mdpi xhdpi xxhdpi xxxhdpi; do mkdir -p android/app/src/main/res/mipmap-${dir}; done
-          convert ia_office_asistant_app/icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          convert ia_office_asistant_app/icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/
-          cp android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+          for d in hdpi mdpi xhdpi xxhdpi xxxhdpi; do mkdir -p android/app/src/main/res/mipmap-$d; done
+          convert icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          convert icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          for d in mdpi xhdpi xxhdpi xxxhdpi; do cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-$d/ic_launcher.png; cp android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png android/app/src/main/res/mipmap-$d/ic_launcher_round.png; done
           cd android && chmod +x gradlew && ./gradlew assembleDebug
 
       - uses: actions/upload-artifact@v4
