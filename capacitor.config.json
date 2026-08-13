@@ -1,7 +1,7 @@
 {
   "appId": "com.masters.iaoffice",
   "appName": "IA_OFFICE_ASSISTANT",
-  "webDir": "",
+  "webDir": ".",
   "server": {
     "androidScheme": "https"
   },
