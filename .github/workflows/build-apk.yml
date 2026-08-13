@@ -28,7 +28,7 @@ jobs:
           test -f capacitor.config.json && echo "config presente"
       - name: Agregar plataforma Android
         run: |
-          if [ ! -d "android" ]; then npx cap add android; fi ]
+          npx cap add android || echo "android ya existe"
       - name: Sincronizar archivos
         run: npx cap copy android
       - name: Fix icono MASTER S sin corte
