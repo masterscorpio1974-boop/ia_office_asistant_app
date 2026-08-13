@@ -1,48 +1,57 @@
 name: Build IA_OFFICE_ASSISTANT APK
 on:
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: 📥 Obtener código
+      - name: Obtener codigo
         uses: actions/checkout@v4
-
-      - name: 🛠️ Instalar Node.js y herramientas
+      - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: ☕ Instalar Java para Android
+      - name: Instalar Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: 📦 Instalar Capacitor y dependencias
+      - name: Instalar Capacitor
         run: |
           npm install -g @capacitor/cli @capacitor/android
           npm install
-      - name: 🧪 Verificar estructura de archivos
+      - name: Verificar estructura
         run: |
-          ls -la src/
-          test -f src/index.html && echo "✅ index.html presente"
-          test -f src/style.css && echo "✅ style.css presente"
-          test -f src/logic.js && echo "✅ logic.js presente"
-      - name: 🤖 Agregar plataforma Android
-        run: npx cap add android
-
-      - name: 🔧 Sincronizar archivos al proyecto Android
-        run: npx cap sync android
-
-      - name: 📲 Compilar APK de depuración
+          ls -la
+          test -f index.html && echo "index.html presente"
+          test -f icon.png && echo "icon.png presente"
+          test -f capacitor.config.json && echo "config presente"
+      - name: Agregar plataforma Android
+        run: |
+          if [ ! -d "android" ]; then npx cap add android; fi ]
+      - name: Sincronizar archivos
+        run: npx cap copy android
+      - name: Fix icono MASTER S sin corte
+        run: |
+          sudo apt-get update && sudo apt-get install -y imagemagick
+          mkdir -p android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi
+          convert icon.png -gravity center -extent 1:1 -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          convert icon.png -gravity center -extent 1:1 -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          convert icon.png -gravity center -extent 1:1 -resize 96x96 android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          convert icon.png -gravity center -extent 1:1 -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          convert icon.png -gravity center -extent 1:1 -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
+          cp android/app/src/main/res/mipmap-mdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
+          cp android/app/src/main/res/mipmap-xhdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
+          cp android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
+          cp android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
+      - name: Compilar APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
-      - name: 📤 Subir APK generado
+      - name: Subir APK
         uses: actions/upload-artifact@v4
         with:
-          name: IA_OFFICE_ASSISTANT-APP
+          name: apk-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
