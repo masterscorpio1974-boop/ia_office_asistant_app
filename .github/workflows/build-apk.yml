@@ -13,16 +13,18 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - run: npm install
-      - name: Limpiar android viejo
-        run: rm -rf android
+      - name: Instalar
+        run: cd ia_office_asistant_app && npm install
+      - name: Limpiar android
+        run: cd ia_office_asistant_app && rm -rf android
       - name: Crear android
-        run: npx cap add android
+        run: cd ia_office_asistant_app && npx cap add android
       - name: Sincronizar
-        run: npx cap copy android && npx cap sync android
+        run: cd ia_office_asistant_app && npx cap copy android && npx cap sync android
       - name: Fix icono MASTER S
         run: |
           sudo apt-get update && sudo apt-get install -y imagemagick
+          cd ia_office_asistant_app
           for d in hdpi mdpi xhdpi xxhdpi xxxhdpi; do mkdir -p android/app/src/main/res/mipmap-$d; done
           convert icon.png -gravity center -extent 1:1 -resize 72x72 android/app/src/main/res/mipmap-hdpi/ic_launcher.png
           convert icon.png -gravity center -extent 1:1 -resize 48x48 android/app/src/main/res/mipmap-mdpi/ic_launcher.png
@@ -32,10 +34,10 @@ jobs:
           for d in hdpi mdpi xhdpi xxhdpi xxxhdpi; do cp android/app/src/main/res/mipmap-$d/ic_launcher.png android/app/src/main/res/mipmap-$d/ic_launcher_round.png; done
       - name: Compilar APK
         run: |
-          cd android
+          cd ia_office_asistant_app/android
           chmod +x gradlew
-         ./gradlew assembleDebug
+          ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: apk-debug
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: ia_office_asistant_app/android/app/build/outputs/apk/debug/app-debug.apk
