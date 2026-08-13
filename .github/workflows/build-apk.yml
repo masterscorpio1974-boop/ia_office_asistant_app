@@ -8,29 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Fix icon JPG to PNG
+
+      - name: Fix icon y crear www
         run: |
-          # Si hay icon.jpg lo convierte a png real
+          sudo apt-get update && sudo apt-get install -y imagemagick
+          # Si tienes icon.jpg lo hace PNG
           if [ -f "ia_office_asistant_app/icon.jpg" ]; then
-            sudo apt-get update && sudo apt-get install -y imagemagick
             convert ia_office_asistant_app/icon.jpg ia_office_asistant_app/icon.png
-            rm ia_office_asistant_app/icon.jpg
           fi
-          # Si viene de WhatsApp con otro nombre
-          if [ -f "ia_office_asistant_app/IMG-*.jpg" ]; then
-            mv ia_office_asistant_app/IMG-*.jpg ia_office_asistant_app/icon.png || true
-          fi
-          # Crea iconos con padding para que no se corte
-          sudo apt-get install -y imagemagick || true
-          mkdir -p android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi
-          for size in 72 48 96 144 192; do
-            case $size in
-              72) dir="hdpi";; 48) dir="mdpi";; 96) dir="xhdpi";; 144) dir="xxhdpi";; 192) dir="xxxhdpi";;
-            esac
-            convert ia_office_asistant_app/icon.png -resize 512x512 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-${dir}/ic_launcher.png || true
-            convert ia_office_asistant_app/icon.png -resize 512x512 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-${dir}/ic_launcher_round.png || true
-          done
+          # Crea www que es lo que te faltaba
+          mkdir -p www
+          cp ia_office_asistant_app/index.html www/index.html || cp index.html www/index.html
+          cp ia_office_asistant_app/icon.png www/icon.png || true
+          ls -lh www/
 
       - uses: actions/setup-node@v4
         with:
@@ -39,12 +29,25 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+
       - name: Build APK
         run: |
           npm install
           npm run build || true
-          npx cap sync android || true
+          npx cap add android || true
+          npx cap copy android
+          npx cap sync android
+          # Icono con mucho margen para que no se corte la S
+          mkdir -p android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi
+          for size in 72 48 96 144 192; do
+            case $size in
+              72) dir="hdpi";; 48) dir="mdpi";; 96) dir="xhdpi";; 144) dir="xxhdpi";; 192) dir="xxxhdpi";;
+            esac
+            convert ia_office_asistant_app/icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-${dir}/ic_launcher.png
+            convert ia_office_asistant_app/icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-${dir}/ic_launcher_round.png
+          done
           cd android && chmod +x gradlew && ./gradlew assembleDebug
+
       - uses: actions/upload-artifact@v4
         with:
           name: IA_OFFICE_ASSISTANT-APK
