@@ -2,124 +2,101 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>IA_OFFICE_ASSISTANT - By MASTER S.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>IA_OFFICE_ASSISTANT BY MASTER S.</title>
 <style>
-:root{--azul:#0a1628;--azul-medio:#1a2b48;--azul-claro:#2a3f5f;--fondo:#f3f2f1;--blanco:#fff;--texto:#222;--gris:#e2e2d2}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui,Segoe UI,Calibri,Arial,sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column}
-header{background:linear-gradient(135deg,var(--azul) 0%,var(--azul-medio) 60%,#0d2137 100%);color:var(--blanco);padding:14px 16px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
-header::before{content:"";position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.15) 0%,transparent 70%);border-radius:50%}
-.logo-wrap{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
-.logo-svg{width:48px;height:48px;filter:drop-shadow(0 0 8px rgba(0,212,255,.4))}
-.titulos{display:flex;flex-direction:column}
-.titulos h1{font-size:20px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;line-height:1.1;color:var(--blanco)}
-.titulos small{font-size:11px;color:#00d4ff;margin-top:3px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
-.barra-navegacion{display:flex;gap:6px;padding:10px;background:var(--gris);flex-wrap:wrap;align-items:center;border-bottom:1px solid #bbb}
-.barra-navegacion button{padding:8px 12px;border-radius:5px;border:1px solid #bbb;cursor:pointer;font-size:14px;background:#fff}
-.barra-navegacion button:active{transform:scale(.97)}
-.btn-primario{background:var(--azul-medio)!important;color:var(--blanco)!important;border-color:var(--azul-medio)!important}
-.modo-tabs{display:flex;background:#d5d5d5;padding:6px 10px 0;gap:4px}
-.modo-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;background:#c0c0c0;border:none;border-radius:6px 6px 0 0;cursor:pointer}
-.modo-tab.activo{background:var(--blanco);color:var(--azul-medio);border-bottom:2px solid var(--azul-medio)}
-.area-trabajo{padding:12px;flex:1;display:flex;flex-direction:column;overflow:hidden}
-.editor-wrap{background:var(--blanco);border:1px solid #ccc;border-radius:6px;flex:1;display:flex;flex-direction:column;overflow:hidden}
-.editor-toolbar{display:flex;gap:4px;padding:8px;background:#fafafa;border-bottom:1px solid #e0e0e0;flex-wrap:wrap;align-items:center}
-.editor-toolbar button{width:34px;height:34px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer}
-#editor{flex:1;padding:14px;font-size:17px;line-height:1.7;outline:none;overflow-y:auto;min-height:180px}
-.barra-envio{display:flex;gap:8px;margin-top:10px}
-.barra-envio input{flex:1;padding:12px 14px;border-radius:6px;border:1px solid #ccc;font-size:15px;outline:none}
-.barra-envio input:focus{border-color:var(--azul-medio)}
-.barra-envio button{padding:12px 22px;border-radius:6px;border:none;background:var(--azul-medio);color:#fff;font-size:15px;cursor:pointer}
-.estado{margin-top:10px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:#eee;border-radius:6px}
-.estado.ok{color:#0a7}
-.estado.error{color:#d43}
-.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.estado.ok.dot{background:#4caf50;box-shadow:0 0 6px #4caf50}
-.estado.error.dot{background:#f44336}
-.panel-respuesta{margin-top:10px;padding:12px;background:#fff;border-radius:6px;min-height:80px;border:1px solid #ddd;font-size:14px;max-height:300px;overflow-y:auto}
-#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 20px;border-radius:20px;opacity:0;transition:.3s;z-index:9999}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+*{box-sizing:border-box}
+body{font-family:Arial, sans-serif;margin:0;background:#e8ebe0;padding-bottom:80px}
+.header{background:#0f2a44;color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+.logo{width:40px;height:40px;background:linear-gradient(135deg,#1e90ff,#004080);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.header b{font-size:18px;display:block}
+.header span{color:#1e90ff;font-size:13px;font-weight:bold}
+.btns{display:flex;flex-wrap:wrap;gap:7px;padding:10px;background:#e8ebe0}
+.btns button{padding:10px 14px;border-radius:8px;border:1px solid #bbb;background:white;font-weight:bold;font-size:14px}
+.btns button.dark{background:#0f2a44;color:white;border-color:#0f2a44}
+.tabs{display:flex;gap:8px;padding:10px 10px 0 10px}
+.tab{padding:10px 18px;border-radius:10px 10px 0 0;border:none;background:#cbd0c2;font-weight:bold}
+.tab.active{background:white;border-bottom:3px solid #0f2a44}
+#editor{margin:0 10px;background:white;border-radius:0 10px 10px 10px;padding:15px;min-height:220px;border:1px solid #ccc;outline:none}
+#editor:empty:before{content:'Escribe aquí tu contenido...';color:#888}
+.status{margin:10px;padding:10px;text-align:center;color:#0a8a5c;font-weight:bold;background:#d1f0e0;border-radius:8px}
+.ia-box{margin:10px;background:white;padding:12px 15px;border-radius:10px;border:1px solid #ccc;min-height:55px}
+.input-area{position:fixed;bottom:0;left:0;right:0;display:flex;gap:8px;padding:10px;background:#e8ebe0;border-top:1px solid #ccc}
+.input-area input{flex:1;padding:13px;border-radius:25px;border:1px solid #aaa;font-size:15px}
+.input-area button{padding:13px 22px;background:#0f2a44;color:white;border-radius:25px;border:none;font-weight:bold}
 </style>
 </head>
 <body>
-<header>
-<div class="logo-wrap">
-<svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<linearGradient id="escudoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" style="stop-color:#0a4d8f"/>
-<stop offset="50%" style="stop-color:#007bff"/>
-<stop offset="100%" style="stop-color:#044994"/>
-</linearGradient>
-<linearGradient id="ojoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" style="stop-color:#13b3ff"/>
-<stop offset="50%" style="stop-color:#00a8ff"/>
-<stop offset="100%" style="stop-color:#0088cc"/>
-</linearGradient>
-<filter id="glowOjo" x="-30%" y="-30%" width="160%" height="160%">
-<feGaussianBlur stdDeviation="2" result="blur"/>
-<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-</defs>
-<polygon points="50,2 85,15 96,50 85,85 50,98 15,85 4,50 15,15" fill="url(#escudoGrad)" stroke="#003366" stroke-width="2"/>
-<path d="M30 28 L65 28 L42 42 L42 58 L58 58 L42 72 L58 58 L62 58 L42 38 L65 38 Z" fill="#fff"/>
-<polygon points="52,38 38,32 44,38 38,44" fill="url(#ojoGrad)" filter="url(#glowOjo)"/>
-<polygon points="56,38 62,32 68,38 62,44" fill="url(#ojoGrad)" filter="url(#glowOjo)"/>
-<circle cx="36" cy="35" r="1.5" fill="#fff" opacity="0.9"/>
-<circle cx="60" cy="35" r="1.5" fill="#fff" opacity="0.9"/>
-</svg>
-<div class="titulos">
-<h1>IA_OFFICE_ASSISTANT</h1>
-<small>By MASTER S.</small>
-</div>
-</div>
-</header>
+<div class="header"><div class="logo">⚡</div><div><b>IA_OFFICE_ASSISTANT</b><span>BY MASTER S.</span></div></div>
 
-<div class="barra-navegacion">
-<button onclick="fmt('bold')" title="Negrita"><b>B</b></button>
-<button onclick="fmt('italic')" title="Cursiva"><i>K</i></button>
-<button onclick="fmt('underline')" title="Subrayar"><u>U</u></button>
-<button onclick="guardarArchivo()">💾 Guardar</button>
-<button onclick="verGuardados()">📂 Ver Datos Guardados</button>
-<button class="btn-primario" onclick="accionIA('Corrige ortografía, gramática y estilo de este texto manteniendo el formato: ')">✓ Corregir</button>
-<button class="btn-primario" onclick="accionIA('Reescribe con tono formal profesional: ')">📝 Formal</button>
-<button class="btn-primario" onclick="accionIA('Calcula y explica paso a paso: ')">🧮 Calcular</button>
+<div class="btns">
+<button onclick="formatear('bold')"><b>B</b></button>
+<button onclick="formatear('italic')"><i>K</i></button>
+<button onclick="formatear('underline')"><u>U</u></button>
+<button onclick="guardarDoc()">💾 Guardar</button>
+<button onclick="verDoc()">📁 Ver Datos</button>
+<button class="dark" onclick="accionIA('Corrige la ortografia y gramatica de: ')">✓ Corregir</button>
+<button class="dark" onclick="accionIA('Haz formal este texto: ')">📝 Formal</button>
+<button class="dark" onclick="accionIA('Resuelve y calcula: ')">🧮 Calcular</button>
 </div>
 
-<div class="modo-tabs">
-<div class="modo-tab activo" onclick="setModo('doc')" id="tab-doc">📄 Documento</div>
-<div class="modo-tab" onclick="setModo('excel')" id="tab-excel">📊 Hoja de Cálculo</div>
-</div>
+<div class="tabs"><button class="tab active">📄 Documento</button><button class="tab" onclick="alert('Hoja de cálculo próximamente')">📊 Hoja</button></div>
 
-<div class="area-trabajo">
-<div class="editor-wrap" id="wrap-doc">
-<div class="editor-toolbar">
-<button onclick="fmt('bold')"><b>B</b></button>
-<button onclick="fmt('italic')"><i>I</i></button>
-<button onclick="fmt('underline')"><u>U</u></button>
-</div>
-<div id="editor" contenteditable="true"><p>Escribe aquí tu contenido...</p></div>
-</div>
+<div id="editor" contenteditable="true"></div>
+<div class="status" id="status">● Conectado - LISTO</div>
+<div class="ia-box"><b>IA:</b> <span id="iaResp">Esperando tu consulta...</span></div>
+<div style="height:70px"></div>
+<div class="input-area"><input id="inputIA" placeholder="Escribe algo y pulsa Enviar"><button onclick="enviarIA()">Enviar</button></div>
 
-<div id="estado" class="estado ok"><span class="dot"></span> Conectado - LISTO</div>
-<div class="panel-respuesta" id="respuesta"><strong>IA:</strong> Esperando tu consulta...</div>
-<div class="barra-envio">
-<input type="text" id="pregunta" placeholder="Escribe algo y pulsa Enviar" onkeydown="if(event.key==='Enter')enviar()">
-<button onclick="enviar()">Enviar</button>
-</div>
-</div>
-
-<div id="toast"></div>
 <script>
-let API="https://api.masters-ai.com/api/generate"; // YA NO ES 127.0.0.1 - AHORA NUBE
-let MODELO="master-office-v1";
-function toast(m){let t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500)}
-function setModo(m){document.getElementById("tab-doc").classList.toggle("activo",m=="doc");document.getElementById("tab-excel")?.classList.toggle("activo",m=="excel");toast("Modo "+m)}
-function fmt(cmd,val){document.execCommand(cmd,false,val);document.getElementById("editor").focus()}
-function guardarLocal(){localStorage.setItem("ia_office_v4",document.getElementById("editor").innerHTML)}
-function cargarTodo(){let raw=localStorage.getItem("ia_office_v4");if(raw){document.getElementById("editor").innerHTML=raw}}
-function guardarArchivo(){let c=document.getElementById("editor").innerText;let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/plain"}));a.download="MASTER_S_"+Date.now()+".txt";a.click();toast("Guardado")}
-function verGuardados(){alert(localStorage.getItem("ia_office_v4")?.substring(0,500)||"Sin datos")}
-async function accionIA(prefijo){let t=window.getSelection().toString().trim();if(!t)t=document.getElementById("editor").innerText;if(!t)return toast("Escribe algo primero");enviar(prefijo+t)}
-async function enviar(q){let input=document.getElementById("pregunta");let query=q||input.value.trim();if(!query
+const editor = document.getElementById('editor');
+const iaResp = document.getElementById('iaResp');
+const inputIA = document.getElementById('inputIA');
+const statusEl = document.getElementById('status');
+
+function formatear(cmd){
+  editor.focus();
+  document.execCommand(cmd,false,null);
+}
+function guardarDoc(){
+  localStorage.setItem('doc_MASTER_S', editor.innerHTML);
+  statusEl.innerText = '✔ Guardado correctamente';
+  setTimeout(()=>statusEl.innerText='● Conectado - LISTO',2000);
+}
+function verDoc(){
+  const d = localStorage.getItem('doc_MASTER_S');
+  if(d){ editor.innerHTML=d; iaResp.innerText='Documento recuperado'; } else { alert('No hay datos guardados'); }
+}
+async function accionIA(prefijo){
+  let texto = editor.innerText.trim();
+  if(!texto){ alert('Escribe algo primero en el documento'); return; }
+  iaResp.innerText = 'Pensando...';
+  try{
+    const r = await fetch('https://api.masters-ai.com/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt: prefijo + texto})});
+    const data = await r.json();
+    let res = data.text || data.result || data.response || JSON.stringify(data);
+    iaResp.innerText = res;
+    editor.innerText = res;
+  }catch(e){ iaResp.innerText='Error: '+e.message+' (revisa tu API)'; }
+}
+async function enviarIA(){
+  let q = inputIA.value.trim();
+  if(!q) return;
+  let contexto = editor.innerText;
+  iaResp.innerText = 'Pensando...';
+  try{
+    const r = await fetch('https://api.masters-ai.com/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt: q + ' CONTEXTO: ' + contexto})});
+    const data = await r.json();
+    iaResp.innerText = data.text || data.result || data.response || JSON.stringify(data);
+  }catch(e){ iaResp.innerText='Error: '+e.message; }
+  inputIA.value='';
+}
+inputIA.addEventListener('keypress',function(e){ if(e.key==='Enter') enviarIA(); });
+window.onload = function(){ 
+  let d = localStorage.getItem('doc_MASTER_S');
+  if(d) editor.innerHTML=d;
+  console.log('MASTER S IA LISTA');
+};
+</script>
+</body>
+</html>
