@@ -1,0 +1,7 @@
+{
+  "appId": "com.masters.iaoffice",
+  "appName": "IA_OFFICE_ASSISTANT",
+  "webDir": ".",
+  "server": {"androidScheme": "http", "cleartext": true},
+  "plugins": {"SplashScreen": {"launchShowDuration": 2000, "backgroundColor": "#0a1628"}}
+}
