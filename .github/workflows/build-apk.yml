@@ -15,8 +15,8 @@ jobs:
           java-version: '17'
       - run: npm install
       - run: mkdir -p www && cp index.html www/index.html && cp icon.png www/icon.png
-      - run: rm -rf android- 
-        run: npx cap add android
+      - run: rm -rf android
+      - run: npx cap add android
       - run: npx cap copy android && npx cap sync android
       - name: Fix icono MASTER S
         run: |
