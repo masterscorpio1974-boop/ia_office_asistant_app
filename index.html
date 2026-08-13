@@ -2,250 +2,124 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>IA_OFFICE_ASSISTANT by MASTER S.</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>IA_OFFICE_ASSISTANT - By MASTER S.</title>
 <style>
+:root{--azul:#0a1628;--azul-medio:#1a2b48;--azul-claro:#2a3f5f;--fondo:#f3f2f1;--blanco:#fff;--texto:#222;--gris:#e2e2d2}
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--azul:#0a1628;--azul-medio:#1a2b48;--azul-claro:#2a3f5f;--fondo:#f3f2f1;--blanco:#fff;--texto:#222;--ok:#2e7d32;--error:#c62828;--gris:#e0e0e0;--cyan:#00d4ff}
 body{font-family:system-ui,Segoe UI,Calibri,Arial,sans-serif;background:var(--fondo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column}
-
-header{background:linear-gradient(135deg,var(--azul) 0%,var(--azul-medio) 60%,#0d2137 100%);color:var(--blanco);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 10px rgba(0,0,0,.35);position:relative;overflow:hidden}
-header::before{content:"";position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.08) 0%,transparent 70%);pointer-events:none}
+header{background:linear-gradient(135deg,var(--azul) 0%,var(--azul-medio) 60%,#0d2137 100%);color:var(--blanco);padding:14px 16px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden}
+header::before{content:"";position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(0,212,255,.15) 0%,transparent 70%);border-radius:50%}
 .logo-wrap{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
 .logo-svg{width:48px;height:48px;filter:drop-shadow(0 0 8px rgba(0,212,255,.4))}
 .titulos{display:flex;flex-direction:column}
-.titulos h1{font-size:20px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;line-height:1.1;color:var(--blanco);text-shadow:0 2px 4px rgba(0,0,0,.3)}
-.titulos small{font-size:11px;color:var(--cyan);margin-top:3px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:.9}
-
-.barra-navegacion{display:flex;gap:6px;padding:10px;background:var(--gris);flex-wrap:wrap;align-items:center;border-bottom:1px solid #ccc}
-.barra-navegacion button{padding:8px 12px;border-radius:5px;border:1px solid #bbb;cursor:pointer;font-size:14px;background:var(--blanco);color:var(--texto);display:inline-flex;align-items:center;gap:5px;touch-action:manipulation}
+.titulos h1{font-size:20px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;line-height:1.1;color:var(--blanco)}
+.titulos small{font-size:11px;color:#00d4ff;margin-top:3px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.barra-navegacion{display:flex;gap:6px;padding:10px;background:var(--gris);flex-wrap:wrap;align-items:center;border-bottom:1px solid #bbb}
+.barra-navegacion button{padding:8px 12px;border-radius:5px;border:1px solid #bbb;cursor:pointer;font-size:14px;background:#fff}
 .barra-navegacion button:active{transform:scale(.97)}
 .btn-primario{background:var(--azul-medio)!important;color:var(--blanco)!important;border-color:var(--azul-medio)!important}
-
 .modo-tabs{display:flex;background:#d5d5d5;padding:6px 10px 0;gap:4px}
-.modo-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;background:#c0c0c0;border:none;border-radius:6px 6px 0 0;cursor:pointer;color:#444}
+.modo-tab{flex:1;padding:8px;text-align:center;font-size:13px;font-weight:600;background:#c0c0c0;border:none;border-radius:6px 6px 0 0;cursor:pointer}
 .modo-tab.activo{background:var(--blanco);color:var(--azul-medio);border-bottom:2px solid var(--azul-medio)}
-
 .area-trabajo{padding:12px;flex:1;display:flex;flex-direction:column;overflow:hidden}
-
-.editor-wrap{background:var(--blanco);border:1px solid #ccc;border-radius:6px;flex:1;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.editor-wrap{background:var(--blanco);border:1px solid #ccc;border-radius:6px;flex:1;display:flex;flex-direction:column;overflow:hidden}
 .editor-toolbar{display:flex;gap:4px;padding:8px;background:#fafafa;border-bottom:1px solid #e0e0e0;flex-wrap:wrap;align-items:center}
-.editor-toolbar button{width:34px;height:34px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
-.editor-toolbar button:active{background:#e3f2fd}
-.editor-toolbar select{height:34px;border:1px solid #ccc;border-radius:4px;padding:0 6px;font-size:13px;background:#fff}
-.editor-toolbar input[type="color"]{width:36px;height:34px;border:1px solid #ccc;border-radius:4px;padding:2px;cursor:pointer}
+.editor-toolbar button{width:34px;height:34px;border:1px solid #ccc;border-radius:4px;background:#fff;cursor:pointer}
 #editor{flex:1;padding:14px;font-size:17px;line-height:1.7;outline:none;overflow-y:auto;min-height:180px}
-#editor p{margin-bottom:10px}
-#editor ul,#editor ol{padding-left:26px;margin-bottom:10px}
-
-.excel-wrap{background:var(--blanco);border:1px solid #ccc;border-radius:6px;flex:1;display:none;flex-direction:column;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.excel-bar{display:flex;gap:6px;padding:8px;background:#fafafa;border-bottom:1px solid #e0e0e0;flex-wrap:wrap;align-items:center}
-.excel-bar span{font-family:monospace;font-weight:700;background:#e3f2fd;padding:5px 10px;border-radius:4px;font-size:13px;border:1px solid #90caf9}
-.excel-bar input{flex:1;border:1px solid #ccc;border-radius:4px;padding:6px 10px;font-size:13px;font-family:monospace}
-.excel-bar button{padding:6px 10px;border:1px solid #bbb;border-radius:4px;background:#fff;cursor:pointer;font-size:12px}
-.excel-bar button:active{background:#e3f2fd}
-.excel-grid{flex:1;overflow:auto;padding:8px}
-.excel-grid table{border-collapse:collapse;width:100%}
-.excel-grid th{background:#e8ecf1;border:1px solid #b0bec5;padding:5px 6px;font-size:11px;font-weight:600;color:#455a64;position:sticky;top:0;z-index:2;text-align:center}
-.excel-grid td{border:1px solid #ddd;padding:4px 6px;font-size:13px;min-width:70px;height:30px;cursor:cell;background:#fff;white-space:nowrap}
-.excel-grid td.sel{background:#bbdefb;outline:2px solid #1976d2;outline-offset:-2px}
-.excel-grid td input{border:none;outline:none;width:100%;font-size:13px;background:transparent;font-family:inherit}
-.excel-grid .rh{background:#e8ecf1;border:1px solid #b0bec5;font-size:11px;color:#455a64;text-align:center;position:sticky;left:0;z-index:1;font-weight:600;padding:4px 6px}
-.sheet-tabs{display:flex;background:#f0f2f5;border-top:1px solid #ddd;padding:4px 8px;gap:4px;overflow-x:auto}
-.sheet-tab{padding:5px 14px;background:#cfd8dc;border:1px solid #b0bec5;border-radius:4px 4px 0 0;font-size:12px;cursor:pointer;white-space:nowrap;color:#37474f;font-weight:500}
-.sheet-tab.activo{background:#1976d2;color:#fff;border-color:#1976d2}
-
-.estado{margin-top:10px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fff;border-radius:6px;border:1px solid #ddd}
-.estado.ok{color:var(--ok)}
-.estado.error{color:var(--error)}
-.estado .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
-.estado.ok .dot{background:#4caf50;box-shadow:0 0 6px #4caf50}
-.estado.error .dot{background:#f44336}
-
-.panel-respuesta{margin-top:10px;padding:12px;background:#fff;border-radius:6px;min-height:80px;border:1px solid #ddd;font-size:15px;line-height:1.6;max-height:200px;overflow-y:auto;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.panel-respuesta strong{color:var(--azul-medio)}
-
 .barra-envio{display:flex;gap:8px;margin-top:10px}
-.barra-envio input{flex:1;padding:12px 14px;border-radius:6px;border:1px solid #ccc;font-size:15px;outline:none;background:#fff}
+.barra-envio input{flex:1;padding:12px 14px;border-radius:6px;border:1px solid #ccc;font-size:15px;outline:none}
 .barra-envio input:focus{border-color:var(--azul-medio)}
-.barra-envio button{padding:12px 22px;border-radius:6px;border:none;background:var(--azul-medio);color:#fff;font-size:15px;font-weight:600;cursor:pointer}
-
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;align-items:center;justify-content:center;padding:16px}
-.modal-overlay.activo{display:flex}
-.modal-box{background:var(--blanco);border-radius:10px;max-width:520px;width:100%;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,.25)}
-.modal-head{padding:14px 16px;border-bottom:1px solid #eee;font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;background:#fafafa;border-radius:10px 10px 0 0}
-.modal-body{padding:14px;overflow-y:auto;flex:1;font-size:14px;line-height:1.5}
-.modal-foot{padding:12px 16px;border-top:1px solid #eee;text-align:right;display:flex;gap:8px;justify-content:flex-end}
-.modal-foot button{padding:8px 16px;border-radius:5px;border:none;cursor:pointer;font-size:13px}
-.modal-foot .btn-cerrar{background:#e0e0e0;color:#333}
-.modal-foot .btn-accion{background:var(--azul-medio);color:#fff}
-
-#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.barra-envio button{padding:12px 22px;border-radius:6px;border:none;background:var(--azul-medio);color:#fff;font-size:15px;cursor:pointer}
+.estado{margin-top:10px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 12px;background:#eee;border-radius:6px}
+.estado.ok{color:#0a7}
+.estado.error{color:#d43}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.estado.ok.dot{background:#4caf50;box-shadow:0 0 6px #4caf50}
+.estado.error.dot{background:#f44336}
+.panel-respuesta{margin-top:10px;padding:12px;background:#fff;border-radius:6px;min-height:80px;border:1px solid #ddd;font-size:14px;max-height:300px;overflow-y:auto}
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:#333;color:#fff;padding:10px 20px;border-radius:20px;opacity:0;transition:.3s;z-index:9999}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-@media(max-width:480px){
-  header{padding:12px}
-  .logo-svg{width:40px;height:40px}
-  .titulos h1{font-size:17px}
-  .barra-navegacion button{font-size:12px;padding:7px 9px}
-  #editor{font-size:16px}
-  .barra-envio input,.barra-envio button{padding:10px}
-}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo-wrap">
-    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="escudoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#00a8ff"/>
-          <stop offset="50%" style="stop-color:#007bff"/>
-          <stop offset="100%" style="stop-color:#004494"/>
-        </linearGradient>
-        <linearGradient id="ojoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#b3f0ff"/>
-          <stop offset="50%" style="stop-color:#00d4ff"/>
-          <stop offset="100%" style="stop-color:#0088cc"/>
-        </linearGradient>
-        <filter id="glowOjo" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <polygon points="50,2 85,15 96,50 85,85 50,98 15,85 4,50 15,15" fill="url(#escudoGrad)" stroke="#003366" stroke-width="1"/>
-      <path d="M30 28 L65 28 L65 42 L42 42 L42 48 L58 48 L58 58 L42 58 L42 68 L65 68 L65 82 L30 82 L30 68 L53 68 L53 62 L37 62 L37 52 L53 52 L53 42 L30 42 Z" fill="#0a0a0a" stroke="#1a1a2e" stroke-width="0.5"/>
-      <polygon points="32,38 38,32 44,38 38,44" fill="url(#ojoGrad)" filter="url(#glowOjo)"/>
-      <polygon points="56,38 62,32 68,38 62,44" fill="url(#ojoGrad)" filter="url(#glowOjo)"/>
-      <circle cx="36" cy="35" r="1.5" fill="#fff" opacity="0.9"/>
-      <circle cx="60" cy="35" r="1.5" fill="#fff" opacity="0.9"/>
-    </svg>
-    <div class="titulos">
-      <h1>IA_OFFICE_ASSISTANT</h1>
-      <small>By MASTER S.</small>
-    </div>
-  </div>
+<div class="logo-wrap">
+<svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="escudoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#0a4d8f"/>
+<stop offset="50%" style="stop-color:#007bff"/>
+<stop offset="100%" style="stop-color:#044994"/>
+</linearGradient>
+<linearGradient id="ojoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+<stop offset="0%" style="stop-color:#13b3ff"/>
+<stop offset="50%" style="stop-color:#00a8ff"/>
+<stop offset="100%" style="stop-color:#0088cc"/>
+</linearGradient>
+<filter id="glowOjo" x="-30%" y="-30%" width="160%" height="160%">
+<feGaussianBlur stdDeviation="2" result="blur"/>
+<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+</defs>
+<polygon points="50,2 85,15 96,50 85,85 50,98 15,85 4,50 15,15" fill="url(#escudoGrad)" stroke="#003366" stroke-width="2"/>
+<path d="M30 28 L65 28 L42 42 L42 58 L58 58 L42 72 L58 58 L62 58 L42 38 L65 38 Z" fill="#fff"/>
+<polygon points="52,38 38,32 44,38 38,44" fill="url(#ojoGrad)" filter="url(#glowOjo)"/>
+<polygon points="56,38 62,32 68,38 62,44" fill="url(#ojoGrad)" filter="url(#glowOjo)"/>
+<circle cx="36" cy="35" r="1.5" fill="#fff" opacity="0.9"/>
+<circle cx="60" cy="35" r="1.5" fill="#fff" opacity="0.9"/>
+</svg>
+<div class="titulos">
+<h1>IA_OFFICE_ASSISTANT</h1>
+<small>By MASTER S.</small>
+</div>
+</div>
 </header>
 
 <div class="barra-navegacion">
-  <button onclick="fmt('bold')" title="Negrita"><b>N</b></button>
-  <button onclick="fmt('italic')" title="Cursiva"><i>K</i></button>
-  <button onclick="guardarArchivo()">💾 Guardar</button>
-  <button onclick="verGuardados()">📂 Ver Datos Guardados</button>
-  <button class="btn-primario" onclick="accionIa('Corrige ortografía, gramática y estilo de este texto manteniendo el formato: ')">✏️ Corregir</button>
-  <button class="btn-primario" onclick="accionIa('Reescribe con tono formal profesional: ')">📄 Formal</button>
-  <button class="btn-primario" onclick="accionIa('Calcula y explica paso a paso: ')">🧮 Calcular</button>
+<button onclick="fmt('bold')" title="Negrita"><b>B</b></button>
+<button onclick="fmt('italic')" title="Cursiva"><i>K</i></button>
+<button onclick="fmt('underline')" title="Subrayar"><u>U</u></button>
+<button onclick="guardarArchivo()">💾 Guardar</button>
+<button onclick="verGuardados()">📂 Ver Datos Guardados</button>
+<button class="btn-primario" onclick="accionIA('Corrige ortografía, gramática y estilo de este texto manteniendo el formato: ')">✓ Corregir</button>
+<button class="btn-primario" onclick="accionIA('Reescribe con tono formal profesional: ')">📝 Formal</button>
+<button class="btn-primario" onclick="accionIA('Calcula y explica paso a paso: ')">🧮 Calcular</button>
 </div>
 
 <div class="modo-tabs">
-  <div class="modo-tab activo" onclick="setModo('doc')" id="tab-doc">📝 Documento</div>
-  <div class="modo-tab" onclick="setModo('excel')" id="tab-excel">📊 Hoja de Cálculo</div>
+<div class="modo-tab activo" onclick="setModo('doc')" id="tab-doc">📄 Documento</div>
+<div class="modo-tab" onclick="setModo('excel')" id="tab-excel">📊 Hoja de Cálculo</div>
 </div>
 
 <div class="area-trabajo">
-  <div class="editor-wrap" id="wrap-doc">
-    <div class="editor-toolbar">
-      <button onclick="fmt('bold')"><b>B</b></button>
-      <button onclick="fmt('italic')"><i>I</i></button>
-      <button onclick="fmt('underline')"><u>U</u></button>
-      <button onclick="fmt('strikeThrough')">S</button>
-      <select onchange="fmt('fontSize',this.value)">
-        <option value="3">Normal</option><option value="1">8px</option><option value="2">10px</option>
-        <option value="4">18px</option><option value="5">24px</option><option value="6">32px</option><option value="7">48px</option>
-      </select>
-      <input type="color" onchange="fmt('foreColor',this.value)" value="#000000">
-      <button onclick="fmt('justifyLeft')">⬅️</button>
-      <button onclick="fmt('justifyCenter')">↔️</button>
-      <button onclick="fmt('justifyRight')">➡️</button>
-      <button onclick="fmt('insertUnorderedList')">•</button>
-      <button onclick="fmt('insertOrderedList')">1.</button>
-    </div>
-    <div id="editor" contenteditable="true" spellcheck="false">
-      <p>System created by MASTER S.</p>
-      <p>Escribe aquí tu contenido...</p>
-    </div>
-  </div>
-
-  <div class="excel-wrap" id="wrap-excel">
-    <div class="excel-bar">
-      <span id="cell-ref">A1</span>
-      <input type="text" id="formula-bar" placeholder="=SUM(A1:A5) o escribe texto" onkeydown="if(event.key==='Enter')applyFormula()">
-      <button onclick="addRow()">+Fila</button>
-      <button onclick="addCol()">+Col</button>
-      <button onclick="addSheet()">+Hoja</button>
-      <button onclick="insertChart()">📊</button>
-      <button onclick="exportCSV()">📥 CSV</button>
-    </div>
-    <div class="excel-grid" id="grid"></div>
-    <div class="sheet-tabs" id="sheet-tabs"></div>
-  </div>
-
-  <div class="estado ok" id="estado"><span class="dot"></span> ✅ Conectado — LISTO</div>
-  <div class="panel-respuesta" id="respuesta"><strong>IA:</strong> Esperando tu consulta...</div>
-  <div class="barra-envio">
-    <input type="text" id="pregunta" placeholder="Escribe algo y pulsa Enviar" onkeydown="if(event.key==='Enter')enviar()">
-    <button onclick="enviar()">Enviar</button>
-  </div>
+<div class="editor-wrap" id="wrap-doc">
+<div class="editor-toolbar">
+<button onclick="fmt('bold')"><b>B</b></button>
+<button onclick="fmt('italic')"><i>I</i></button>
+<button onclick="fmt('underline')"><u>U</u></button>
+</div>
+<div id="editor" contenteditable="true"><p>Escribe aquí tu contenido...</p></div>
 </div>
 
-<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)cerrarModal()">
-  <div class="modal-box">
-    <div class="modal-head">
-      <span>📂 Tus Datos Guardados</span>
-      <span style="cursor:pointer;font-size:20px" onclick="cerrarModal()">✕</span>
-    </div>
-    <div class="modal-body" id="modal-body"><p>Sin datos guardados aún.</p></div>
-    <div class="modal-foot">
-      <button class="btn-cerrar" onclick="cerrarModal()">Cerrar</button>
-      <button class="btn-accion" onclick="exportarDoc()">📄 Exportar .doc</button>
-      <button class="btn-accion" onclick="exportarTXT()">📥 Exportar .txt</button>
-    </div>
-  </div>
+<div id="estado" class="estado ok"><span class="dot"></span> Conectado - LISTO</div>
+<div class="panel-respuesta" id="respuesta"><strong>IA:</strong> Esperando tu consulta...</div>
+<div class="barra-envio">
+<input type="text" id="pregunta" placeholder="Escribe algo y pulsa Enviar" onkeydown="if(event.key==='Enter')enviar()">
+<button onclick="enviar()">Enviar</button>
+</div>
 </div>
 
 <div id="toast"></div>
-
 <script>
-const API="http://127.0.0.1:8090/api/generate";
-const MODELO="sam-office-mary:latest";
-let modo="doc",sheets=[[[""]]],sheetNames=["Hoja1"],curSheet=0,curCell={r:0,c:0},computed=[];
-
-window.addEventListener("DOMContentLoaded",()=>{cargarTodo();renderGrid();renderSheetTabs();checkIA();setInterval(guardarLocal,3e4);setInterval(checkIA,1e4)});
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2e3)}
-function setModo(m){modo=m;document.getElementById("tab-doc").classList.toggle("activo",m==="doc");document.getElementById("tab-excel").classList.toggle("activo",m==="excel");document.getElementById("wrap-doc").style.display=m==="doc"?"flex":"none";document.getElementById("wrap-excel").style.display=m==="excel"?"flex":"none";if(m==="doc")document.getElementById("editor").focus();toast(m==="doc"?"📝 Modo Documento":"📊 Modo Excel")}
-function fmt(cmd,val){if(modo!=="doc")setModo("doc");document.execCommand(cmd,false,val||null);document.getElementById("editor").focus()}
-function guardarLocal(){try{const data={doc:document.getElementById("editor").innerHTML,sheets:sheets,sheetNames:sheetNames,curSheet:curSheet,modo:modo,savedAt:new Date().toISOString()};localStorage.setItem("ia_office_v4",JSON.stringify(data))}catch(e){}}
-function cargarTodo(){try{const raw=localStorage.getItem("ia_office_v4");if(!raw)return;const d=JSON.parse(raw);if(d.doc)document.getElementById("editor").innerHTML=d.doc;if(d.sheets)sheets=d.sheets;if(d.sheetNames)sheetNames=d.sheetNames;if(d.curSheet!==undefined)curSheet=d.curSheet;if(d.modo){modo=d.modo;setModo(modo)}}catch(e){console.error(e)}}
-function guardarArchivo(){const t=document.getElementById("editor").innerText;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/plain"}));a.download="documento_IA_OFFICE.txt";a.click();guardarLocal();toast("💾 Guardado como .txt")}
-function verGuardados(){try{const raw=localStorage.getItem("ia_office_v4");const body=document.getElementById("modal-body");if(!raw){body.innerHTML="<p>Sin datos guardados aún.</p>"}else{const d=JSON.parse(raw);const fecha=d.savedAt?new Date(d.savedAt).toLocaleString("es-MX"):"Desconocida";body.innerHTML=`<p><b>Último guardado:</b> ${fecha}</p><p><b>Modo:</b> ${d.modo==="excel"?"Excel":"Documento"}</p><p><b>Hojas:</b> ${(d.sheetNames||[]).join(", ")}</p><hr style="margin:10px 0;border:none;border-top:1px solid #eee"><p><b>Vista previa:</b></p><div style="border:1px solid #ddd;padding:10px;border-radius:6px;background:#fafafa;max-height:150px;overflow:auto;font-size:12px">${(d.doc||"").substring(0,600)}${(d.doc||"").length>600?"...":""}</div>`}document.getElementById("modal-overlay").classList.add("activo")}catch(e){toast("Error al leer datos")}}
-function cerrarModal(){document.getElementById("modal-overlay").classList.remove("activo")}
-function exportarDoc(){const html=`<html><head><meta charset="UTF-8"><title>Documento</title></head><body style="font-family:Georgia,serif;line-height:1.7;padding:40px">${document.getElementById("editor").innerHTML}</body></html>`;const blob=new Blob([html],{type:"application/msword"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Documento_IA_OFFICE.doc";a.click();toast("📄 .doc descargado")}
-function exportarTXT(){guardarArchivo();cerrarModal()}
-function colName(n){let s="";while(n>=0){s=String.fromCharCode(65+(n%26))+s;n=Math.floor(n/26)-1}return s||"A"}
-function colNum(s){let n=0;for(let i=0;i<s.length;i++)n=n*26+(s.charCodeAt(i)-64);return n-1}
-function esc(t){const d=document.createElement("div");d.textContent=t;return d.innerHTML}
-function renderGrid(){const data=sheets[curSheet];const cols=Math.max(...data.map(r=>r.length),1);let html="<table><thead><tr><th class='rh'></th>";for(let c=0;c<cols;c++)html+=`<th>${colName(c)}</th>`;html+="</tr></thead><tbody>";data.forEach((row,r)=>{html+=`<tr><td class="rh">${r+1}</td>`;for(let c=0;c<cols;c++){const val=row[c]!==undefined?row[c]:"";const sel=(r===curCell.r&&c===curCell.c)?"sel":"";html+=`<td class="${sel}" onclick="selCell(${r},${c})" ondblclick="editCell(this,${r},${c})">${esc(val)}</td>`}html+="</tr>"});html+="</tbody></table>";document.getElementById("grid").innerHTML=html;document.getElementById("cell-ref").textContent=colName(curCell.c)+(curCell.r+1)}
-function selCell(r,c){curCell={r,c};const data=sheets[curSheet];const val=data[r]&&data[r][c]!==undefined?data[r][c]:"";document.getElementById("formula-bar").value=val;renderGrid()}
-function editCell(td,r,c){const data=sheets[curSheet];const val=data[r]&&data[r][c]!==undefined?data[r][c]:"";td.innerHTML=`<input type="text" value="${esc(val)}" onblur="saveCell(this.value,${r},${c})" onkeydown="if(event.key==='Enter')this.blur()">`;const inp=td.querySelector("input");inp.focus();inp.select()}
-function saveCell(val,r,c){if(!sheets[curSheet][r])sheets[curSheet][r]=[];sheets[curSheet][r][c]=val;if(typeof val==="string"&&val.startsWith("="))computeAll();renderGrid();guardarLocal()}
-function applyFormula(){saveCell(document.getElementById("formula-bar").value,curCell.r,curCell.c)}
-function getV(data,r,c){if(computed&&computed[r]&&computed[r][c]!==null)return computed[r][c];if(data[r]&&data[r][c]!==undefined)return data[r][c];return 0}
-function computeAll(){const data=sheets[curSheet];computed=data.map(row=>row.map(()=>null));data.forEach((row,r)=>{row.forEach((cell,c)=>{if(typeof cell==="string"&&cell.startsWith("=")){computed[r][c]=evalFormula(cell.substring(1),data)}else{computed[r][c]=cell}})})}
-function evalFormula(expr,data){expr=expr.toUpperCase().trim();let m=expr.match(/^SUM\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)$/);if(m){let sum=0,c1=colNum(m[1]),r1=parseInt(m[2])-1,c2=colNum(m[3]),r2=parseInt(m[4])-1;for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++)sum+=parseFloat(getV(data,r,c))||0;return sum}m=expr.match(/^AVG\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)$/);if(m){let sum=0,cnt=0,c1=colNum(m[1]),r1=parseInt(m[2])-1,c2=colNum(m[3]),r2=parseInt(m[4])-1;for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++){sum+=parseFloat(getV(data,r,c))||0;cnt++}return cnt?(sum/cnt).toFixed(2):0}m=expr.match(/^COUNT\(([A-Z]+)(\d+):([A-Z]+)(\d+)\)$/);if(m){let cnt=0,c1=colNum(m[1]),r1=parseInt(m[2])-1,c2=colNum(m[3]),r2=parseInt(m[4])-1;for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++)if(getV(data,r,c)!=="")cnt++;return cnt}try{let f=expr.replace(/([A-Z]+)(\d+)/g,(match,col,row)=>{return parseFloat(getV(data,parseInt(row)-1,colNum(col)))||0});return eval(f)}catch(e){return"#ERROR"}}
-function addRow(){const cols=Math.max(...sheets[curSheet].map(r=>r.length),1);sheets[curSheet].push(new Array(cols).fill(""));renderGrid();guardarLocal()}
-function addCol(){sheets[curSheet].forEach(r=>r.push(""));renderGrid();guardarLocal()}
-function addSheet(){sheets.push([[""]]);sheetNames.push("Hoja"+(sheetNames.length+1));curSheet=sheets.length-1;renderGrid();renderSheetTabs();guardarLocal()}
-function switchSheet(i){curSheet=i;renderGrid();renderSheetTabs()}
-function renderSheetTabs(){document.getElementById("sheet-tabs").innerHTML=sheetNames.map((n,i)=>`<div class="sheet-tab ${i===curSheet?'activo':''}" onclick="switchSheet(${i})">${esc(n)}</div>`).join("")}
-function insertChart(){const data=sheets[curSheet];let labels=[],vals=[];data.forEach((row,i)=>{if(i>0&&row[0]&&row[1]){labels.push(row[0]);vals.push(parseFloat(row[1])||0)}});if(!vals.length){toast("Usa Col A=etiquetas, Col B=números");return}const max=Math.max(...vals);const colors=["#1976d2","#388e3c","#fbc02d","#d32f2f","#7b1fa2","#00796b"];const bars=vals.map((v,i)=>{const h=(v/max)*120;return`<div style="flex:1;min-width:30px;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:20px;height:${h}px;background:${colors[i%colors.length]};border-radius:3px 3px 0 0"></div><span style="font-size:9px;color:#666;transform:rotate(-35deg);white-space:nowrap">${esc(labels[i])}</span><span style="font-size:10px;font-weight:700">${v}</span></div>`}).join("");const body=document.getElementById("modal-body");body.innerHTML=`<div style="display:flex;align-items:flex-end;gap:4px;height:160px;padding:10px;border:1px solid #eee;border-radius:6px">${bars}</div>`;document.getElementById("modal-overlay").classList.add("activo")}
-function exportCSV(){const data=sheets[curSheet];let csv="\uFEFF";data.forEach(row=>{csv+=row.map(c=>'"'+String(c||"").replace(/"/g,'""')+'"').join(",")+"\n"});const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="Hoja_IA_OFFICE.csv";a.click();toast("📊 CSV descargado")}
-async function checkIA(){const est=document.getElementById("estado");try{const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),4e3);const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:MODELO,prompt:"hola"}),signal:ctrl.signal});if(r.ok){est.className="estado ok";est.innerHTML='<span class="dot"></span> ✅ Conectado — LISTO'}else throw new Error("fail")}catch(e){est.className="estado error";est.innerHTML='<span class="dot"></span> ⚠️ Desconectado — Inicia Ollama'}}
-function obtenerTexto(){const sel=window.getSelection().toString().trim();if(sel)return sel;return document.getElementById("editor").innerText.trim()}
-async function accionIa(prefijo){const t=obtenerTexto();if(!t||t==="System created by MASTER S."||t==="Escribe aquí tu contenido..."){toast("Escribe o selecciona texto primero");return}document.getElementById("pregunta").value=prefijo+t.substring(0,1e3);await enviar()}
-async function enviar(){const q=document.getElementById("pregunta").value.trim();if(!q)return;const res=document.getElementById("respuesta");const est=document.getElementById("estado");est.className="estado";est.innerHTML="⏳ Procesando...";res.innerHTML="<strong>IA:</strong> Pensando...";try{const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),9e4);const r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:MODELO,prompt:q}),signal:ctrl.signal});clearTimeout(to);const j=await r.json();const txt=(j.response||j.error||"Sin respuesta").replace(/\n/g,"<br>");res.innerHTML=`<strong>IA:</strong> ${txt}`;est.className="estado ok";est.innerHTML='<span class="dot"></span> ✅ Conectado — LISTO';guardarLocal()}catch(e){res.innerHTML=`<strong>IA:</strong> ⚠️ ${e.name==="AbortError"?"Tiempo agotado":e.message}`;est.className="estado error";est.innerHTML='<span class="dot"></span> ⚠️ Falló la comunicación'}document.getElementById("pregunta").value=""}
-window.addEventListener("beforeprint",()=>{document.querySelectorAll(".barra-navegacion,.modo-tabs,.editor-toolbar,.excel-bar,.sheet-tabs,.barra-envio,.estado").forEach(e=>e.style.display="none")})
-window.addEventListener("afterprint",()=>{document.querySelectorAll(".barra-navegacion,.modo-tabs,.editor-toolbar,.excel-bar,.sheet-tabs,.barra-envio,.estado").forEach(e=>e.style.display="")})
-</script>
-</body>
-</html>
+let API="https://api.masters-ai.com/api/generate"; // YA NO ES 127.0.0.1 - AHORA NUBE
+let MODELO="master-office-v1";
+function toast(m){let t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500)}
+function setModo(m){document.getElementById("tab-doc").classList.toggle("activo",m=="doc");document.getElementById("tab-excel")?.classList.toggle("activo",m=="excel");toast("Modo "+m)}
+function fmt(cmd,val){document.execCommand(cmd,false,val);document.getElementById("editor").focus()}
+function guardarLocal(){localStorage.setItem("ia_office_v4",document.getElementById("editor").innerHTML)}
+function cargarTodo(){let raw=localStorage.getItem("ia_office_v4");if(raw){document.getElementById("editor").innerHTML=raw}}
+function guardarArchivo(){let c=document.getElementById("editor").innerText;let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([c],{type:"text/plain"}));a.download="MASTER_S_"+Date.now()+".txt";a.click();toast("Guardado")}
+function verGuardados(){alert(localStorage.getItem("ia_office_v4")?.substring(0,500)||"Sin datos")}
+async function accionIA(prefijo){let t=window.getSelection().toString().trim();if(!t)t=document.getElementById("editor").innerText;if(!t)return toast("Escribe algo primero");enviar(prefijo+t)}
+async function enviar(q){let input=document.getElementById("pregunta");let query=q||input.value.trim();if(!query
