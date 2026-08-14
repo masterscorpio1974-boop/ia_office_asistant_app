@@ -16,11 +16,15 @@
 .tabs{display:flex;gap:0;padding:0 10px}
 .tabs button{flex:1;padding:12px;border:none;background:#d1d5db;border-radius:10px 10px 0 0;font-weight:bold;cursor:pointer}
 .tabs button.active{background:white;border-bottom:3px solid #10b981}
-.page{margin:10px;background:white;border-radius:10px;border:1px solid #ccc;padding:15px;min-height:420px;display:none}
+.page{margin:10px;background:white;border-radius:10px;border:1px solid #ccc;padding:10px;min-height:420px;display:none;overflow:auto}
 .page.active{display:block;outline:none}
+#pHoja{overflow-x:auto;-webkit-overflow-scrolling:touch}
 #status{margin:10px;text-align:center;background:#d1fae5;color:#0a3d2e;padding:8px;border-radius:8px;font-weight:bold}
-table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:8px;min-width:80px}th{background:#0a3d2e;color:white}
-@media(min-width:768px){.page{margin:15px auto;max-width:1100px} .header{padding:15px 25px}}
+#tbl{border-collapse:collapse;min-width:650px;width:100%;display:table}
+#tbl td,#tbl th{border:1px solid #aaa;padding:8px;min-width:85px}
+#tbl th{background:#0a3d2e;color:white;position:sticky;top:0;z-index:2}
+#tbl th:first-child{min-width:45px;max-width:45px}
+@media(min-width:768px){.page{margin:15px auto;max-width:1100px}.header{padding:15px 25px}}
 </style>
 </head>
 <body>
@@ -63,14 +67,66 @@ table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:8p
 <script>
 let tab='doc';
 function cTab(t){tab=t; document.getElementById('tDoc').classList.toggle('active',t=='doc'); document.getElementById('tHoja').classList.toggle('active',t=='hoja'); document.getElementById('pDoc').classList.toggle('active',t=='doc'); document.getElementById('pHoja').classList.toggle('active',t=='hoja');}
-function formatear(c){document.execCommand(c,false,null);}
-function guardarTodo(){localStorage.setItem('docV',document.getElementById('pDoc').innerHTML); localStorage.setItem('hojaV',document.getElementById('pHoja').innerHTML); let s=document.getElementById('status'); s.innerText='✓ Guardado localmente'; setTimeout(()=>s.innerText='● LISTO - OFFLINE SIN IA',1500);}
-function verDatos(){let d=localStorage.getItem('docV'); let h=localStorage.getItem('hojaV'); if(d)document.getElementById('pDoc').innerHTML=d; if(h)document.getElementById('pHoja').innerHTML=h; document.getElementById('status').innerText='✓ Datos recuperados';}
-function nuevoDoc(){if(confirm('¿Borrar todo y empezar nuevo?')){document.getElementById('pDoc').innerHTML=''; document.getElementById('status').innerText='Nuevo documento';}}
-function copiarTodo(){let r=document.createRange(); r.selectNodeContents(document.getElementById(tab=='doc'?'pDoc':'pHoja')); let sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy'); document.getElementById('status').innerText='✓ Copiado';}
-function addRow(){let tbl=document.getElementById('tbl'); let r=tbl.insertRow(); let idx=tbl.rows.length-1; let th=document.createElement('th'); th.innerText=idx; r.appendChild(th); for(let i=0;i<6;i++){let c=r.insertCell(); c.contentEditable=true;}}
-function addCol(){let tbl=document.getElementById('tbl'); for(let row of tbl.rows){let c=row.insertCell(); if(row.rowIndex==0){c.outerHTML='<th>'+String.fromCharCode(64+row.cells.length-1)+'</th>';}else{c.contentEditable=true;}}}
-window.onload=()=>{verDatos(); if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}}
+function formatear(c){document.execCommand(c,false,null); document.getElementById('pDoc').focus();}
+function guardarTodo(){
+  localStorage.setItem('docV',document.getElementById('pDoc').innerHTML);
+  localStorage.setItem('hojaV',document.getElementById('tbl').outerHTML);
+  let s=document.getElementById('status'); s.innerText='✓ Guardado localmente';
+  setTimeout(()=>s.innerText='● LISTO - OFFLINE SIN IA',1500);
+}
+function verDatos(){
+  let d=localStorage.getItem('docV');
+  let h=localStorage.getItem('hojaV');
+  if(d) document.getElementById('pDoc').innerHTML=d;
+  if(h){
+    document.getElementById('tbl').outerHTML=h;
+    document.querySelectorAll('#tbl td').forEach(td=>td.contentEditable=true);
+  }
+  document.getElementById('status').innerText='✓ Datos recuperados';
+}
+function nuevoDoc(){
+  if(confirm('¿Borrar todo y empezar nuevo?')){
+    document.getElementById('pDoc').innerHTML='';
+    localStorage.removeItem('docV');
+    localStorage.removeItem('hojaV');
+    document.getElementById('status').innerText='Nuevo documento';
+  }
+}
+function copiarTodo(){
+  let r=document.createRange(); r.selectNodeContents(document.getElementById(tab=='doc'?'pDoc':'pHoja'));
+  let sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy');
+  document.getElementById('status').innerText='✓ Copiado';
+}
+function addRow(){
+  let tbl=document.getElementById('tbl');
+  let r=tbl.insertRow();
+  let idx=tbl.rows.length-1;
+  let th=document.createElement('th'); th.innerText=idx; r.appendChild(th);
+  for(let i=0;i<tbl.rows[0].cells.length-1;i++){let c=r.insertCell(); c.contentEditable=true;}
+}
+function addCol(){
+  let tbl=document.getElementById('tbl');
+  for(let row of tbl.rows){
+    let c=row.insertCell();
+    if(row.rowIndex==0){c.outerHTML='<th>'+String.fromCharCode(64+row.cells.length-1)+'</th>';}
+    else{c.contentEditable=true;}
+  }
+}
+function cargarAlIniciar(){
+  let d=localStorage.getItem('docV');
+  let h=localStorage.getItem('hojaV');
+  if(d && d.trim()!='') document.getElementById('pDoc').innerHTML=d;
+  if(h && h.trim()!=''){
+    try{
+      document.getElementById('tbl').outerHTML=h;
+      document.querySelectorAll('#tbl td').forEach(td=>td.contentEditable=true);
+    }catch(e){}
+  }
+}
+window.addEventListener('load', cargarAlIniciar);
+document.addEventListener('DOMContentLoaded', cargarAlIniciar);
+setTimeout(cargarAlIniciar, 600);
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
 </script>
 </body>
 </html>
