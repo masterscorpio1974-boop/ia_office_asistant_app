@@ -1,5 +1,8 @@
 name: Build IA_OFFICE_LOCAL APK
-on: [push]
+
+on:
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,7 +27,7 @@ jobs:
       - name: Icono VERDE y Splash
         run: |
           ICON=$(find . -maxdepth 2 -type f \( -iname "icon.png" -o -iname "icon.jpg" -o -iname "logo.png" \) | head -1)
-          if [ -z "$ICON" ]; then echo "No icon found, usando default"; ICON="www/icon.png"; convert -size 512x512 xc:"#10b981" $ICON; fi
+          if [ -z "$ICON" ]; then ICON="www/icon.png"; convert -size 512x512 xc:"#10b981" $ICON; fi
           echo "Usando icono: $ICON"
           mkdir -p android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi android/app/src/main/res/drawable
           for size in 48 72 96 144 192; do
@@ -33,7 +36,6 @@ jobs:
             convert "$ICON" -resize 280x280 -gravity center -extent ${size}x${size} -background "#10b981" android/app/src/main/res/mipmap-${dir}/ic_launcher_round.png
           done
           convert "$ICON" -resize 600x600 -gravity center -extent 1280x1920 -background "#0a3d2e" -fill white -pointsize 120 -gravity center -annotate +0+200 "S" android/app/src/main/res/drawable/splash.png || convert -size 1280x1920 xc:"#0a3d2e" android/app/src/main/res/drawable/splash.png
-          echo "Icono y Splash VERDE creados"
       - name: Build APK
         run: |
           cd android
