@@ -1,55 +1,45 @@
-name: Build IA_OFFICE_ASSISTANT APK
-on:
-  workflow_dispatch:
+name: Build IA_OFFICE_LOCAL APK
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Preparar icon y www
-        run: |
-          sudo apt-get update && sudo apt-get install -y imagemagick
-          ICON_SRC=""
-          if [ -f "icon.jpg" ]; then ICON_SRC="icon.jpg"; fi
-          if [ -f "icon.png" ]; then ICON_SRC="icon.png"; fi
-          if [ -f "ia_office_asistant_app/icon.jpg" ]; then ICON_SRC="ia_office_asistant_app/icon.jpg"; fi
-          if [ -f "ia_office_asistant_app/icon.png" ]; then ICON_SRC="ia_office_asistant_app/icon.png"; fi
-          echo "Icono: $ICON_SRC"
-          convert "$ICON_SRC" icon.png
-          mkdir -p www
-          if [ -f "index.html" ]; then cp index.html www/index.html; else cp ia_office_asistant_app/index.html www/index.html; fi
-          cp icon.png www/icon.png
-
       - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
+        with: { node-version: 20 }
       - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Configurar reintentos Gradle
+        with: { distribution: temurin, java-version: 17 }
+      - uses: android-actions/setup-android@v3
+      - name: Install deps
         run: |
-          mkdir -p ~/.gradle
-          echo "org.gradle.network.retry.max.attempts=5" >> ~/.gradle/gradle.properties
-          echo "org.gradle.network.retry.initial.backOff=1000" >> ~/.gradle/gradle.properties
-
-      - name: Build APK
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          sudo apt-get update && sudo apt-get install -y imagemagick
+      - name: Build Web
         run: |
-          npm install
-          npm run build || true
+          mkdir -p www
+          cp index.html www/index.html
+          cp capacitor.config.json capacitor.config.json || echo '{"appId":"com.masters.iaofficelocal","appName":"IA_OFFICE_LOCAL","webDir":"www","server":{"cleartext":true}}' > capacitor.config.json
           npx cap add android || true
           npx cap copy android
-          npx cap sync android
-          for d in hdpi mdpi xhdpi xxhdpi xxxhdpi; do mkdir -p android/app/src/main/res/mipmap-$d; done
-          convert icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          convert icon.png -resize 280x280 -gravity center -extent 512x512 -background black android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          for d in mdpi xhdpi xxhdpi xxxhdpi; do cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-$d/ic_launcher.png; cp android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png android/app/src/main/res/mipmap-$d/ic_launcher_round.png; done
-          cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
-
+      - name: Icono VERDE y Splash
+        run: |
+          ICON=$(find . -maxdepth 2 -type f \( -iname "icon.png" -o -iname "icon.jpg" -o -iname "logo.png" \) | head -1)
+          if [ -z "$ICON" ]; then echo "No icon found, usando default"; ICON="www/icon.png"; convert -size 512x512 xc:"#10b981" $ICON; fi
+          echo "Usando icono: $ICON"
+          mkdir -p android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi android/app/src/main/res/drawable
+          for size in 48 72 96 144 192; do
+            dir=$(case $size in 48) echo mdpi;; 72) echo hdpi;; 96) echo xhdpi;; 144) echo xxhdpi;; 192) echo xxxhdpi;; esac)
+            convert "$ICON" -resize 280x280 -gravity center -extent ${size}x${size} -background "#10b981" android/app/src/main/res/mipmap-${dir}/ic_launcher.png
+            convert "$ICON" -resize 280x280 -gravity center -extent ${size}x${size} -background "#10b981" android/app/src/main/res/mipmap-${dir}/ic_launcher_round.png
+          done
+          convert "$ICON" -resize 600x600 -gravity center -extent 1280x1920 -background "#0a3d2e" -fill white -pointsize 120 -gravity center -annotate +0+200 "S" android/app/src/main/res/drawable/splash.png || convert -size 1280x1920 xc:"#0a3d2e" android/app/src/main/res/drawable/splash.png
+          echo "Icono y Splash VERDE creados"
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: IA_OFFICE_ASSISTANT-APK
-          path: android/app/build/outputs/apk/debug/*.apk
+          name: IA_OFFICE_LOCAL-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
