@@ -1,0 +1,11 @@
+{
+  "name": "OFFICE_VERDE BY MASTER S",
+  "short_name": "OFFICE_VERDE",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a3d2e",
+  "theme_color": "#0a3d2e",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
