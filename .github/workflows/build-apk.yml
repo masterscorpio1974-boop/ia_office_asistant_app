@@ -20,6 +20,7 @@ jobs:
       - name: Build Web
         run: |
           mkdir -p www
+          cp icon.png www/icon.png 2>/dev/null || cp icon.jpg www/icon.png 2>/dev/null || cp ia_office_asistant_app/icon.jpg www/icon.png 2>/dev/null || cp ia_office_asistant_app/icon.png www/icon.png 2>/dev/null || true
           cp index.html www/index.html
           cp capacitor.config.json capacitor.config.json || echo '{"appId":"com.masters.iaofficelocal","appName":"IA_OFFICE_LOCAL","webDir":"www","server":{"cleartext":true}}' > capacitor.config.json
           npx cap add android || true
