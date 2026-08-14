@@ -2,65 +2,75 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IA_OFFICE_LOCAL</title>
+<title>OFFICE_VERDE BY MASTER S</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a3d2e">
 <style>
-*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#e8ebe8;padding-bottom:90px}
-:root{--main:#10b981;--dark:#0a3d2e;--blue:#0f2a44}
-.header{width:100%;background:var(--dark);color:white;padding:10px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
-.header img{width:48px;height:48px;object-fit:contain;border-radius:12px;background:black;padding:2px}
-.btns{display:flex;flex-wrap:wrap;gap:7px;padding:10px;background:#e8ebe8}
-.btns button{padding:10px 14px;border-radius:8px;border:1px solid #bbb;background:white;font-weight:bold}
-.btns button.dark{background:var(--dark);color:white;border-color:var(--dark)}
-.btns button.green{background:var(--main);color:white;border:none}
-.tabs{display:flex;gap:0;padding:0 10px;background:#e8ebe8}
-.tabs button{flex:1;padding:12px;border:none;background:#d1d5db;border-radius:10px 10px 0 0;font-weight:bold}
-.tabs button.active{background:white;border-bottom:2px solid var(--main)}
-#editorDoc,#editorHoja{margin:10px;background:white;border-radius:10px;border:1px solid #ccc;padding:15px;min-height:320px;outline:none;display:none}
-#editorDoc.active,#editorHoja.active{display:block}
-#status{margin:10px;text-align:center;color:#0a5a3c;font-weight:bold;background:#d1fae5;padding:8px;border-radius:8px}
-.ia-box{margin:10px;background:white;padding:12px;border-radius:10px;border:1px solid #ccc}
-.input-area{position:fixed;bottom:0;left:0;right:0;display:flex;gap:8px;padding:10px;background:#e8ebe8;border-top:1px solid #ccc}
-.input-area input{flex:1;padding:13px;border-radius:25px;border:1px solid #aaa}
-.input-area button{padding:13px 22px;background:var(--dark);color:white;border-radius:25px;border:none;font-weight:bold}
-table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:6px;min-width:60px}th{background:var(--dark);color:white}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#e8ebe8;padding-bottom:20px}
+.header{background:#0a3d2e;color:white;padding:12px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.header img{width:48px;height:48px;background:black;border-radius:12px;object-fit:contain}
+.btns{display:flex;flex-wrap:wrap;gap:7px;padding:10px}
+.btns button{padding:10px 14px;border-radius:8px;border:1px solid #bbb;background:white;font-weight:bold;cursor:pointer}
+.btns button.dark{background:#0a3d2e;color:white}
+.btns button.green{background:#10b981;color:white;border:none}
+.tabs{display:flex;gap:0;padding:0 10px}
+.tabs button{flex:1;padding:12px;border:none;background:#d1d5db;border-radius:10px 10px 0 0;font-weight:bold;cursor:pointer}
+.tabs button.active{background:white;border-bottom:3px solid #10b981}
+.page{margin:10px;background:white;border-radius:10px;border:1px solid #ccc;padding:15px;min-height:420px;display:none}
+.page.active{display:block;outline:none}
+#status{margin:10px;text-align:center;background:#d1fae5;color:#0a3d2e;padding:8px;border-radius:8px;font-weight:bold}
+table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:8px;min-width:80px}th{background:#0a3d2e;color:white}
+@media(min-width:768px){.page{margin:15px auto;max-width:1100px} .header{padding:15px 25px}}
 </style>
 </head>
 <body>
-<div class="header"><img src="icon.png" onerror="this.src='www/icon.png'"><div><b>IA_OFFICE_LOCAL</b><br><small>BY MASTER S. · LOCAL</small></div></div>
+<div class="header"><img src="icon.png" onerror="this.src='icon.jpg'"><div><b>OFFICE_VERDE BY MASTER S.</b><br><small>OFFLINE - PC / TABLET / ANDROID 10+</small></div></div>
+
 <div class="btns">
 <button onclick="formatear('bold')"><b>B</b></button>
 <button onclick="formatear('italic')"><i>K</i></button>
 <button onclick="formatear('underline')"><u>U</u></button>
-<button onclick="guardarTodo()">💾 Guardar</button>
-<button onclick="verDatos()">📁 Ver Datos</button>
-<button class="green" onclick="configurarIA()">⚙️ IP Local</button>
-<button class="dark" onclick="accionIA('Corrige: ')">✓ Corregir</button>
-<button class="dark" onclick="accionIA('Haz formal: ')">📝 Formal</button>
-<button class="dark" onclick="accionIA('Calcula: ')">🧮 Calcular</button>
+<button class="green" onclick="guardarTodo()">💾 Guardar</button>
+<button class="dark" onclick="verDatos()">👁️ Ver Datos</button>
+<button class="dark" onclick="nuevoDoc()">📄 Nuevo</button>
+<button class="dark" onclick="copiarTodo()">📋 Copiar</button>
 </div>
+
 <div class="tabs">
-<button id="tabDoc" class="active" onclick="cambiarTab('doc')">📄 Documento</button>
-<button id="tabHoja" onclick="cambiarTab('hoja')">📊 Hoja</button>
+<button id="tDoc" class="active" onclick="cTab('doc')">📄 Documento</button>
+<button id="tHoja" onclick="cTab('hoja')">📊 Hoja Cálculo</button>
 </div>
-<div id="editorDoc" class="active" contenteditable="true">Escribe aquí tu contenido...</div>
-<div id="editorHoja"><table id="tabla"><tr><th>A</th><th>B</th><th>C</th><th>D</th></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></table><br><button onclick="addFila()">+ Fila</button></div>
-<div id="status">● LISTO LOCAL - IP: 192.168.1.15</div>
-<div class="ia-box">🤖 IA: <span id="iaResp">Configura tu IP local</span></div>
-<div class="input-area"><input id="inputIA" placeholder="Escribe algo y pulsa Enviar"><button onclick="enviarIA()">Enviar</button></div>
+
+<div id="pDoc" class="page active" contenteditable="true">Escribe aquí tu documento...<br>Este Office funciona sin internet.</div>
+
+<div id="pHoja" class="page">
+<table id="tbl">
+<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+<tr><th>1</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>2</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>3</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>4</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>5</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>6</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>7</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+<tr><th>8</th><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td><td contenteditable></td></tr>
+</table><br>
+<button onclick="addRow()">+ Fila</button> <button onclick="addCol()">+ Columna</button>
+</div>
+
+<div id="status">● LISTO - OFFLINE SIN IA</div>
+
 <script>
-let tabActual='doc';
-const docEl=document.getElementById('editorDoc'), hojaEl=document.getElementById('editorHoja'), statusEl=document.getElementById('status'), iaResp=document.getElementById('iaResp');
-let ollamaIP=localStorage.getItem('OLLAMA_IP')||'192.168.1.15', ollamaModel=localStorage.getItem('OLLAMA_MODEL')||'sam-office-mary:latest';
-function cambiarTab(t){tabActual=t; document.getElementById('tabDoc').classList.toggle('active',t==='doc'); document.getElementById('tabHoja').classList.toggle('active',t==='hoja'); docEl.classList.toggle('active',t==='doc'); hojaEl.classList.toggle('active',t==='hoja');}
-function formatear(c){(tabActual==='doc'?docEl:document.activeElement).focus(); document.execCommand(c,false,null);}
-function guardarTodo(){localStorage.setItem('doc_LOCAL',docEl.innerHTML); localStorage.setItem('hoja_LOCAL',hojaEl.innerHTML); statusEl.innerText='✓ Guardado'; setTimeout(()=>statusEl.innerText='● LISTO LOCAL - IP: '+ollamaIP,1500);}
-function verDatos(){let d=localStorage.getItem('doc_LOCAL'); let h=localStorage.getItem('hoja_LOCAL'); if(d)docEl.innerHTML=d; if(h)hojaEl.innerHTML=h; iaResp.innerText='Datos recuperados';}
-function addFila(){let tbl=document.getElementById('tabla'); let r=tbl.insertRow(); for(let i=0;i<4;i++){let c=r.insertCell(); c.contentEditable=true;}}
-function configurarIA(){let ip=prompt('IP PC con Ollama:',ollamaIP); if(ip){ollamaIP=ip.trim(); localStorage.setItem('OLLAMA_IP',ollamaIP);} let m=prompt('Modelo:',ollamaModel); if(m){ollamaModel=m.trim(); localStorage.setItem('OLLAMA_MODEL',ollamaModel);} statusEl.innerText='● IP: '+ollamaIP+' Model: '+ollamaModel;}
-async function llamarIA(p){iaResp.innerText='Pensando...'; try{const r=await fetch(`http://${ollamaIP}:11434/api/generate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ollamaModel,prompt:p,stream:false})}); const d=await r.json(); iaResp.innerText=d.response||JSON.stringify(d);}catch(e){iaResp.innerText='Error: '+e.message+' | OLLAMA_HOST=0.0.0.0 y mismo WiFi';}}
-async function accionIA(pre){let txt=tabActual==='doc'?docEl.innerText:document.getElementById('tabla').innerText; if(!txt.trim()){alert('Escribe algo primero'); return;} await llamarIA(pre+txt);}
-async function enviarIA(){let q=document.getElementById('inputIA').value.trim(); if(!q)return; await llamarIA('Contexto: '+(tabActual==='doc'?docEl.innerText:'tabla')+' Pregunta: '+q); document.getElementById('inputIA').value='';}
-window.onload=()=>{let d=localStorage.getItem('doc_LOCAL'); if(d&&d!='Escribe aquí tu contenido...')docEl.innerHTML=d; let h=localStorage.getItem('hoja_LOCAL'); if(h)hojaEl.innerHTML=h; statusEl.innerText='● LISTO LOCAL - IP: '+ollamaIP;};
+let tab='doc';
+function cTab(t){tab=t; document.getElementById('tDoc').classList.toggle('active',t=='doc'); document.getElementById('tHoja').classList.toggle('active',t=='hoja'); document.getElementById('pDoc').classList.toggle('active',t=='doc'); document.getElementById('pHoja').classList.toggle('active',t=='hoja');}
+function formatear(c){document.execCommand(c,false,null);}
+function guardarTodo(){localStorage.setItem('docV',document.getElementById('pDoc').innerHTML); localStorage.setItem('hojaV',document.getElementById('pHoja').innerHTML); let s=document.getElementById('status'); s.innerText='✓ Guardado localmente'; setTimeout(()=>s.innerText='● LISTO - OFFLINE SIN IA',1500);}
+function verDatos(){let d=localStorage.getItem('docV'); let h=localStorage.getItem('hojaV'); if(d)document.getElementById('pDoc').innerHTML=d; if(h)document.getElementById('pHoja').innerHTML=h; document.getElementById('status').innerText='✓ Datos recuperados';}
+function nuevoDoc(){if(confirm('¿Borrar todo y empezar nuevo?')){document.getElementById('pDoc').innerHTML=''; document.getElementById('status').innerText='Nuevo documento';}}
+function copiarTodo(){let r=document.createRange(); r.selectNodeContents(document.getElementById(tab=='doc'?'pDoc':'pHoja')); let sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy'); document.getElementById('status').innerText='✓ Copiado';}
+function addRow(){let tbl=document.getElementById('tbl'); let r=tbl.insertRow(); let idx=tbl.rows.length-1; let th=document.createElement('th'); th.innerText=idx; r.appendChild(th); for(let i=0;i<6;i++){let c=r.insertCell(); c.contentEditable=true;}}
+function addCol(){let tbl=document.getElementById('tbl'); for(let row of tbl.rows){let c=row.insertCell(); if(row.rowIndex==0){c.outerHTML='<th>'+String.fromCharCode(64+row.cells.length-1)+'</th>';}else{c.contentEditable=true;}}}
+window.onload=()=>{verDatos(); if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}}
 </script>
 </body>
 </html>
