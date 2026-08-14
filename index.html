@@ -1,101 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>IA_OFFICE_LOCAL BY MASTER S.</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA_OFFICE_LOCAL</title>
 <style>
-*{box-sizing:border-box}
-:root{--main:#10b981;--dark:#0a3d2e;}
-body{font-family:Arial,sans-serif;margin:0;background:#e8ebe8;padding-bottom:90px}
-.header{width:100%;background:var(--dark);color:white;padding:12px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
-.logo{width:40px;height:40px;background:linear-gradient(135deg,#10b981,#064e3b);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:20px}
+*{box-sizing:border-box}body{font-family:Arial;margin:0;background:#e8ebe8;padding-bottom:90px}
+:root{--main:#10b981;--dark:#0a3d2e;--blue:#0f2a44}
+.header{width:100%;background:var(--dark);color:white;padding:10px 15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.header img{width:48px;height:48px;object-fit:contain;border-radius:12px;background:black;padding:2px}
 .btns{display:flex;flex-wrap:wrap;gap:7px;padding:10px;background:#e8ebe8}
-.btns button{padding:10px 14px;border-radius:8px;border:1px solid #bbb;background:white;font-weight:bold;font-size:14px}
+.btns button{padding:10px 14px;border-radius:8px;border:1px solid #bbb;background:white;font-weight:bold}
 .btns button.dark{background:var(--dark);color:white;border-color:var(--dark)}
 .btns button.green{background:var(--main);color:white;border:none}
-#editor{margin:10px;background:white;border-radius:10px;border:1px solid #ccc;padding:15px;min-height:220px;outline:none}
-#editor:empty:before{content:'Escribe aquí tu contenido...';color:#888}
+.tabs{display:flex;gap:0;padding:0 10px;background:#e8ebe8}
+.tabs button{flex:1;padding:12px;border:none;background:#d1d5db;border-radius:10px 10px 0 0;font-weight:bold}
+.tabs button.active{background:white;border-bottom:2px solid var(--main)}
+#editorDoc,#editorHoja{margin:10px;background:white;border-radius:10px;border:1px solid #ccc;padding:15px;min-height:320px;outline:none;display:none}
+#editorDoc.active,#editorHoja.active{display:block}
 #status{margin:10px;text-align:center;color:#0a5a3c;font-weight:bold;background:#d1fae5;padding:8px;border-radius:8px}
-.ia-box{margin:10px;background:white;padding:12px;border-radius:10px;border:1px solid #ccc;min-height:55px}
+.ia-box{margin:10px;background:white;padding:12px;border-radius:10px;border:1px solid #ccc}
 .input-area{position:fixed;bottom:0;left:0;right:0;display:flex;gap:8px;padding:10px;background:#e8ebe8;border-top:1px solid #ccc}
-.input-area input{flex:1;padding:13px;border-radius:25px;border:1px solid #aaa;font-size:15px}
+.input-area input{flex:1;padding:13px;border-radius:25px;border:1px solid #aaa}
 .input-area button{padding:13px 22px;background:var(--dark);color:white;border-radius:25px;border:none;font-weight:bold}
+table{width:100%;border-collapse:collapse}td,th{border:1px solid #aaa;padding:6px;min-width:60px}th{background:var(--dark);color:white}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">S</div><div><b>IA_OFFICE_LOCAL</b><span> BY MASTER S.</span></div></div>
+<div class="header"><img src="icon.png" onerror="this.src='www/icon.png'"><div><b>IA_OFFICE_LOCAL</b><br><small>BY MASTER S. · LOCAL</small></div></div>
 <div class="btns">
 <button onclick="formatear('bold')"><b>B</b></button>
 <button onclick="formatear('italic')"><i>K</i></button>
 <button onclick="formatear('underline')"><u>U</u></button>
-<button onclick="guardarDoc()">💾 Guardar</button>
-<button onclick="verDoc()">👁️ Ver Datos</button>
-<button class="green" onclick="configurarIA()">⚙️ Config IP Local</button>
-<button class="dark" onclick="accionIA('Corrige la ortografía y gramática de: ')">✓ Corregir</button>
-<button class="dark" onclick="accionIA('Haz formal este texto: ')">📝 Formal</button>
-<button class="dark" onclick="accionIA('Resuelve y calcula: ')">🧮 Calcular</button>
+<button onclick="guardarTodo()">💾 Guardar</button>
+<button onclick="verDatos()">📁 Ver Datos</button>
+<button class="green" onclick="configurarIA()">⚙️ IP Local</button>
+<button class="dark" onclick="accionIA('Corrige: ')">✓ Corregir</button>
+<button class="dark" onclick="accionIA('Haz formal: ')">📝 Formal</button>
+<button class="dark" onclick="accionIA('Calcula: ')">🧮 Calcular</button>
 </div>
-<div id="editor" contenteditable="true"></div>
-<div id="status">● Conectado - LISTO (LOCAL)</div>
-<div class="ia-box">🤖 IA: <span id="iaResp">Esperando... Configura tu IP local.</span></div>
-<div style="height:70px"></div>
+<div class="tabs">
+<button id="tabDoc" class="active" onclick="cambiarTab('doc')">📄 Documento</button>
+<button id="tabHoja" onclick="cambiarTab('hoja')">📊 Hoja</button>
+</div>
+<div id="editorDoc" class="active" contenteditable="true">Escribe aquí tu contenido...</div>
+<div id="editorHoja"><table id="tabla"><tr><th>A</th><th>B</th><th>C</th><th>D</th></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr><tr><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td><td contenteditable="true"></td></tr></table><br><button onclick="addFila()">+ Fila</button></div>
+<div id="status">● LISTO LOCAL - IP: 192.168.1.15</div>
+<div class="ia-box">🤖 IA: <span id="iaResp">Configura tu IP local</span></div>
 <div class="input-area"><input id="inputIA" placeholder="Escribe algo y pulsa Enviar"><button onclick="enviarIA()">Enviar</button></div>
-
 <script>
-const editor = document.getElementById('editor');
-const iaResp = document.getElementById('iaResp');
-const inputIA = document.getElementById('inputIA');
-const statusEl = document.getElementById('status');
-
-let ollamaIP = localStorage.getItem('OLLAMA_IP') || '192.168.1.15';
-let ollamaModel = localStorage.getItem('OLLAMA_MODEL') || 'sam-office-mary:latest';
-
-function formatear(cmd){ editor.focus(); document.execCommand(cmd,false,null); }
-function guardarDoc(){ localStorage.setItem('doc_MASTER_S_LOCAL', editor.innerHTML); statusEl.innerText='✓ Guardado correctamente'; setTimeout(()=>statusEl.innerText='● Conectado - LISTO (LOCAL) - IP: '+ollamaIP,2000); }
-function verDoc(){ const d=localStorage.getItem('doc_MASTER_S_LOCAL'); if(d){ editor.innerHTML=d; iaResp.innerText='Documento recuperado'; } else { alert('No hay datos guardados'); } }
-
-function configurarIA(){
-  let ip = prompt('IP de tu PC con Ollama (ej: 192.168.1.15):', ollamaIP);
-  if(ip){ ollamaIP=ip.trim(); localStorage.setItem('OLLAMA_IP', ollamaIP); }
-  let model = prompt('Modelo Ollama:', ollamaModel);
-  if(model){ ollamaModel=model.trim(); localStorage.setItem('OLLAMA_MODEL', ollamaModel); }
-  statusEl.innerText='● IP: '+ollamaIP+' Model: '+ollamaModel;
-  iaResp.innerText='Configurado: http://'+ollamaIP+':11434';
-}
-
-async function llamarIA(promptCompleto){
-  iaResp.innerText='Pensando...';
-  try{
-    const url = `http://${ollamaIP}:11434/api/generate`;
-    const body = JSON.stringify({ model: ollamaModel, prompt: promptCompleto, stream: false });
-    const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body });
-    const data = await r.json();
-    let res = data.response || data.text || JSON.stringify(data);
-    iaResp.innerText = res;
-  }catch(e){
-    iaResp.innerText='Error: '+e.message+' | Asegurate: 1) PC con OLLAMA_HOST=0.0.0.0 2) Mismo WiFi 3) IP correcta';
-  }
-}
-async function accionIA(prefijo){
-  let texto = editor.innerText.trim();
-  if(!texto){ alert('Escribe algo primero en el documento'); return; }
-  await llamarIA(prefijo + texto);
-}
-async function enviarIA(){
-  let q = inputIA.value.trim();
-  if(!q) return;
-  let contexto = editor.innerText;
-  await llamarIA('Contexto documento: '+contexto+'\nPregunta: '+q);
-  inputIA.value='';
-}
-inputIA.addEventListener('keypress', function(e){ if(e.key==='Enter') enviarIA(); });
-window.onload = function(){
-  let d = localStorage.getItem('doc_MASTER_S_LOCAL');
-  if(d) editor.innerHTML=d;
-  statusEl.innerText='● Conectado - LISTO (LOCAL) - IP: '+ollamaIP;
-  console.log('MASTER S IA LOCAL LISTA');
-}
+let tabActual='doc';
+const docEl=document.getElementById('editorDoc'), hojaEl=document.getElementById('editorHoja'), statusEl=document.getElementById('status'), iaResp=document.getElementById('iaResp');
+let ollamaIP=localStorage.getItem('OLLAMA_IP')||'192.168.1.15', ollamaModel=localStorage.getItem('OLLAMA_MODEL')||'sam-office-mary:latest';
+function cambiarTab(t){tabActual=t; document.getElementById('tabDoc').classList.toggle('active',t==='doc'); document.getElementById('tabHoja').classList.toggle('active',t==='hoja'); docEl.classList.toggle('active',t==='doc'); hojaEl.classList.toggle('active',t==='hoja');}
+function formatear(c){(tabActual==='doc'?docEl:document.activeElement).focus(); document.execCommand(c,false,null);}
+function guardarTodo(){localStorage.setItem('doc_LOCAL',docEl.innerHTML); localStorage.setItem('hoja_LOCAL',hojaEl.innerHTML); statusEl.innerText='✓ Guardado'; setTimeout(()=>statusEl.innerText='● LISTO LOCAL - IP: '+ollamaIP,1500);}
+function verDatos(){let d=localStorage.getItem('doc_LOCAL'); let h=localStorage.getItem('hoja_LOCAL'); if(d)docEl.innerHTML=d; if(h)hojaEl.innerHTML=h; iaResp.innerText='Datos recuperados';}
+function addFila(){let tbl=document.getElementById('tabla'); let r=tbl.insertRow(); for(let i=0;i<4;i++){let c=r.insertCell(); c.contentEditable=true;}}
+function configurarIA(){let ip=prompt('IP PC con Ollama:',ollamaIP); if(ip){ollamaIP=ip.trim(); localStorage.setItem('OLLAMA_IP',ollamaIP);} let m=prompt('Modelo:',ollamaModel); if(m){ollamaModel=m.trim(); localStorage.setItem('OLLAMA_MODEL',ollamaModel);} statusEl.innerText='● IP: '+ollamaIP+' Model: '+ollamaModel;}
+async function llamarIA(p){iaResp.innerText='Pensando...'; try{const r=await fetch(`http://${ollamaIP}:11434/api/generate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ollamaModel,prompt:p,stream:false})}); const d=await r.json(); iaResp.innerText=d.response||JSON.stringify(d);}catch(e){iaResp.innerText='Error: '+e.message+' | OLLAMA_HOST=0.0.0.0 y mismo WiFi';}}
+async function accionIA(pre){let txt=tabActual==='doc'?docEl.innerText:document.getElementById('tabla').innerText; if(!txt.trim()){alert('Escribe algo primero'); return;} await llamarIA(pre+txt);}
+async function enviarIA(){let q=document.getElementById('inputIA').value.trim(); if(!q)return; await llamarIA('Contexto: '+(tabActual==='doc'?docEl.innerText:'tabla')+' Pregunta: '+q); document.getElementById('inputIA').value='';}
+window.onload=()=>{let d=localStorage.getItem('doc_LOCAL'); if(d&&d!='Escribe aquí tu contenido...')docEl.innerHTML=d; let h=localStorage.getItem('hoja_LOCAL'); if(h)hojaEl.innerHTML=h; statusEl.innerText='● LISTO LOCAL - IP: '+ollamaIP;};
 </script>
 </body>
 </html>
