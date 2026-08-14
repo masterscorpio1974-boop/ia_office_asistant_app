@@ -1,6 +1,12 @@
 {
-  "appId": "com.masters.iaoffice",
-  "appName": "IA_OFFICE_ASSISTANT",
+  "appId": "com.masters.iaofficelocal",
+  "appName": "IA_OFFICE_LOCAL",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "server": { "cleartext": true },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#10b981"
+    }
+  }
 }
