@@ -1,8 +1,5 @@
 name: Build IA_OFFICE_LOCAL APK
-
-on:
-  workflow_dispatch:
-
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,38 +7,26 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - uses: actions/setup-java@v4
-        with: { distribution: temurin, java-version: 17 }
-      - uses: android-actions/setup-android@v3
       - name: Install deps
-        run: |
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          sudo apt-get update && sudo apt-get install -y imagemagick
+        run: npm install @capacitor/core @capacitor/cli @capacitor/android || true
       - name: Build Web
         run: |
           mkdir -p www
-          cp icon.png www/icon.png 2>/dev/null || cp icon.jpg www/icon.png 2>/dev/null || cp ia_office_asistant_app/icon.jpg www/icon.png 2>/dev/null || cp ia_office_asistant_app/icon.png www/icon.png 2>/dev/null || true
           cp index.html www/index.html
-          cp capacitor.config.json capacitor.config.json || echo '{"appId":"com.masters.iaofficelocal","appName":"IA_OFFICE_LOCAL","webDir":"www","server":{"cleartext":true}}' > capacitor.config.json
+          cp icon.png www/icon.png 2>/dev/null || cp icon.jpg www/icon.png 2>/dev/null || cp ia_office_asistant_app/icon.jpg www/icon.png 2>/dev/null || cp ia_office_asistant_app/icon.png www/icon.png 2>/dev/null || true
+          cp manifest.json www/manifest.json 2>/dev/null || true
+          cp sw.js www/sw.js 2>/dev/null || true
+          cp capacitor.config.json capacitor.config.json || echo '{"appId":"com.masters.iaofficelocal","appName":"OFFICE_VERDE","webDir":"www"}' > capacitor.config.json
           npx cap add android || true
           npx cap copy android
       - name: Icono VERDE y Splash
         run: |
-          ICON=$(find . -maxdepth 2 -type f \( -iname "icon.png" -o -iname "icon.jpg" -o -iname "logo.png" \) | head -1)
-          if [ -z "$ICON" ]; then ICON="www/icon.png"; convert -size 512x512 xc:"#10b981" $ICON; fi
-          echo "Usando icono: $ICON"
-          mkdir -p android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi android/app/src/main/res/drawable
-          for size in 48 72 96 144 192; do
-            dir=$(case $size in 48) echo mdpi;; 72) echo hdpi;; 96) echo xhdpi;; 144) echo xxhdpi;; 192) echo xxxhdpi;; esac)
-            convert "$ICON" -resize 280x280 -gravity center -extent ${size}x${size} -background "#10b981" android/app/src/main/res/mipmap-${dir}/ic_launcher.png
-            convert "$ICON" -resize 280x280 -gravity center -extent ${size}x${size} -background "#10b981" android/app/src/main/res/mipmap-${dir}/ic_launcher_round.png
-          done
-          convert "$ICON" -resize 600x600 -gravity center -extent 1280x1920 -background "#0a3d2e" -fill white -pointsize 120 -gravity center -annotate +0+200 "S" android/app/src/main/res/drawable/splash.png || convert -size 1280x1920 xc:"#0a3d2e" android/app/src/main/res/drawable/splash.png
+          ICON=$(find . -maxdepth 3 -type f \( -iname "icon.png" -o -iname "icon.jpg" \) | head -1)
+          echo "Icono encontrado: $ICON"
+          for d in android/app/src/main/res/mipmap-* android/app/src/main/res/drawable*; do [ -d "$d" ] && cp "$ICON" "$d/ic_launcher.png" && cp "$ICON" "$d/ic_launcher_round.png" || true; done
       - name: Build APK
         run: |
-          cd android
-          chmod +x gradlew
-          ./gradlew assembleDebug
+          cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
           name: IA_OFFICE_LOCAL-APK
